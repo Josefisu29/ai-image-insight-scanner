@@ -1,11 +1,11 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-import { Upload, Image as ImageIcon, Clock, Brain, TrendingUp, AlertCircle, CheckCircle, XCircle, Zap, Shield, Sparkles } from 'lucide-react';
+import { Upload, Image as ImageIcon, Clock, Brain, TrendingUp, AlertCircle, CheckCircle, XCircle, Zap, Shield, Sparkles, Settings } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { BackendSetup } from '@/components/BackendSetup';
 
 interface DetectionResult {
   result: string;
@@ -26,6 +26,32 @@ const Index = () => {
   const [result, setResult] = useState<DetectionResult | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [backendStatus, setBackendStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
+  const [showSetup, setShowSetup] = useState(false);
+
+  // Check backend connectivity on component mount
+  useEffect(() => {
+    checkBackendConnection();
+  }, []);
+
+  const checkBackendConnection = async () => {
+    try {
+      const response = await fetch('http://localhost:8002/health', {
+        method: 'GET',
+        mode: 'cors',
+      });
+      if (response.ok) {
+        setBackendStatus('connected');
+        toast.success('✅ Backend connected successfully!');
+      } else {
+        setBackendStatus('disconnected');
+      }
+    } catch (error) {
+      console.error('Backend connection failed:', error);
+      setBackendStatus('disconnected');
+      toast.error('❌ Backend not connected. Please start your Python backend.');
+    }
+  };
 
   const handleFileSelect = useCallback((file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -38,11 +64,15 @@ const Index = () => {
     setPreviewUrl(url);
     setResult(null);
     
-    // Auto-detect after file selection
-    setTimeout(() => {
-      detectImage(file);
-    }, 500);
-  }, []);
+    // Auto-detect after file selection only if backend is connected
+    if (backendStatus === 'connected') {
+      setTimeout(() => {
+        detectImage(file);
+      }, 500);
+    } else {
+      toast.warning('Backend not connected. Please start your Python backend first.');
+    }
+  }, [backendStatus]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -78,23 +108,39 @@ const Index = () => {
       return;
     }
 
+    if (backendStatus !== 'connected') {
+      toast.error('Backend not connected. Please start your Python backend on localhost:8002');
+      return;
+    }
+
     setIsDetecting(true);
     setUploadProgress(10);
     
     const formData = new FormData();
-    formData.append('file', fileToDetect);
+    formData.append('file', fileToDetected);
 
     try {
       setUploadProgress(30);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await fetch('http://localhost:8002/detect', {
         method: 'POST',
         body: formData,
+        mode: 'cors',
+        signal: controller.signal,
+        headers: {
+          // Don't set Content-Type for FormData, let browser set it
+        },
       });
 
+      clearTimeout(timeoutId);
       setUploadProgress(70);
 
       if (!response.ok) {
-        throw new Error('Detection failed');
+        const errorText = await response.text();
+        throw new Error(`Detection failed: ${response.status} - ${errorText}`);
       }
 
       const data: DetectionResult = await response.json();
@@ -110,7 +156,12 @@ const Index = () => {
       }
     } catch (error) {
       console.error('Detection error:', error);
-      toast.error('Failed to detect image. Make sure your backend is running on localhost:8002');
+      if (error.name === 'AbortError') {
+        toast.error('Request timed out. Please try again.');
+      } else {
+        toast.error('Failed to detect image. Make sure your backend is running on localhost:8002');
+        setBackendStatus('disconnected');
+      }
     } finally {
       setIsDetecting(false);
       setUploadProgress(0);
@@ -150,6 +201,34 @@ const Index = () => {
     }
   };
 
+  if (showSetup) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          <div className="flex items-center justify-between mb-8">
+            <Button
+              onClick={() => setShowSetup(false)}
+              className="bg-white/10 hover:bg-white/20 text-white"
+            >
+              ← Back to App
+            </Button>
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${
+                backendStatus === 'connected' ? 'bg-green-400' : 
+                backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400'
+              }`}></div>
+              <span className="text-white text-sm">
+                Backend: {backendStatus === 'connected' ? 'Connected' : 
+                         backendStatus === 'disconnected' ? 'Disconnected' : 'Checking...'}
+              </span>
+            </div>
+          </div>
+          <BackendSetup />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
       {/* Animated background elements */}
@@ -160,7 +239,7 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Enhanced Header */}
+        {/* Enhanced Header with Backend Status */}
         <div className="text-center mb-16 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full">
@@ -173,6 +252,38 @@ const Index = () => {
               <Sparkles className="w-8 h-8 text-white" />
             </div>
           </div>
+          
+          {/* Backend Status Indicator */}
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-lg">
+              <div className={`w-3 h-3 rounded-full animate-pulse ${
+                backendStatus === 'connected' ? 'bg-green-400' : 
+                backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400'
+              }`}></div>
+              <span className="text-white text-sm font-medium">
+                Backend: {backendStatus === 'connected' ? 'Connected' : 
+                         backendStatus === 'disconnected' ? 'Disconnected' : 'Checking...'}
+              </span>
+            </div>
+            <Button
+              onClick={() => setShowSetup(true)}
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-white"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Setup
+            </Button>
+            {backendStatus === 'disconnected' && (
+              <Button
+                onClick={checkBackendConnection}
+                size="sm"
+                className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30"
+              >
+                Retry Connection
+              </Button>
+            )}
+          </div>
+
           <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
             Advanced multi-model detection system powered by cutting-edge AI to identify artificially generated images with unprecedented accuracy
           </p>
