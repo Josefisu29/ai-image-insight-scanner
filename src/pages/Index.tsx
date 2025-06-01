@@ -117,22 +117,19 @@ const Index = () => {
     setUploadProgress(10);
     
     const formData = new FormData();
-    formData.append('file', fileToDetected);
+    formData.append('files', fileToDetect);
 
     try {
       setUploadProgress(30);
       
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout for better processing
 
       const response = await fetch('http://localhost:8002/detect', {
         method: 'POST',
         body: formData,
         mode: 'cors',
         signal: controller.signal,
-        headers: {
-          // Don't set Content-Type for FormData, let browser set it
-        },
       });
 
       clearTimeout(timeoutId);
@@ -143,13 +140,16 @@ const Index = () => {
         throw new Error(`Detection failed: ${response.status} - ${errorText}`);
       }
 
-      const data: DetectionResult = await response.json();
+      const data = await response.json();
       setUploadProgress(100);
-      setResult(data);
       
-      if (data.result === 'AI-generated') {
+      // Handle multiple results (new backend returns results array)
+      const resultData = data.results ? data.results[0] : data;
+      setResult(resultData);
+      
+      if (resultData.result === 'AI-generated') {
         toast.error('⚠️ AI-generated image detected!');
-      } else if (data.result === 'Real') {
+      } else if (resultData.result === 'Real') {
         toast.success('✅ Real image detected!');
       } else {
         toast('🔍 Needs manual review');
