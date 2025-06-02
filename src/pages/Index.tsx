@@ -19,6 +19,21 @@ interface DetectionResult {
   search_indication?: string;
 }
 
+const funFacts = [
+  "🤖 AI can now generate images so realistic that even experts struggle to tell the difference!",
+  "🔍 Our system analyzes millions of pixels in seconds to detect AI patterns invisible to the human eye.",
+  "🧠 Deep learning models can identify subtle compression artifacts left by AI generators.",
+  "⚡ The first deepfake was created in 1997, but modern AI can generate faces in milliseconds!",
+  "🎨 AI image generators like DALL-E and Midjourney process billions of parameters per image.",
+  "🔬 Advanced detection looks for inconsistencies in lighting, shadows, and facial geometry.",
+  "🌐 Over 90% of AI-generated content online goes undetected by casual observers.",
+  "🎭 Deepfake technology was originally developed for legitimate film and entertainment purposes.",
+  "📊 Our multi-model approach combines 6 different AI detectors for maximum accuracy.",
+  "🚀 Modern AI can generate a photorealistic face that has never existed in just 3 seconds!",
+  "🔎 Reverse image searches help us track the origin and distribution of suspicious images.",
+  "💡 AI-generated images often have telltale signs in the background and edge details.",
+];
+
 const Index = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -28,6 +43,7 @@ const Index = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [backendStatus, setBackendStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
   const [showSetup, setShowSetup] = useState(false);
+  const [currentFunFact, setCurrentFunFact] = useState('');
 
   // Check backend connectivity on component mount
   useEffect(() => {
@@ -116,6 +132,12 @@ const Index = () => {
     setIsDetecting(true);
     setUploadProgress(10);
     
+    // Start fun facts rotation
+    const factInterval = setInterval(() => {
+      const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+      setCurrentFunFact(randomFact);
+    }, 2000);
+    
     const formData = new FormData();
     formData.append('files', fileToDetect);
 
@@ -123,7 +145,7 @@ const Index = () => {
       setUploadProgress(30);
       
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout for better processing
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
 
       const response = await fetch('http://localhost:8002/detect', {
         method: 'POST',
@@ -165,7 +187,16 @@ const Index = () => {
     } finally {
       setIsDetecting(false);
       setUploadProgress(0);
+      setCurrentFunFact('');
+      clearInterval(factInterval);
     }
+  };
+
+  const getHighestConfidenceModel = (results: Array<{model: string; probability: number; weight: number}>) => {
+    if (!results || results.length === 0) return null;
+    return results.reduce((highest, current) => 
+      current.probability > highest.probability ? current : highest
+    );
   };
 
   const getResultIcon = (result: string) => {
@@ -332,13 +363,18 @@ const Index = () => {
                       />
                       {isDetecting && (
                         <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
-                          <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4">
-                            <div className="flex items-center gap-3 text-white">
+                          <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 max-w-md">
+                            <div className="flex items-center gap-3 text-white mb-4">
                               <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                               <span className="font-medium">Analyzing...</span>
                             </div>
                             {uploadProgress > 0 && (
-                              <Progress value={uploadProgress} className="mt-3 h-2" />
+                              <Progress value={uploadProgress} className="mb-4 h-2" />
+                            )}
+                            {currentFunFact && (
+                              <div className="text-blue-200 text-sm leading-relaxed animate-fade-in">
+                                {currentFunFact}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -390,6 +426,29 @@ const Index = () => {
 
               {result ? (
                 <div className="space-y-8 animate-fade-in">
+                  {/* Highest Confidence Model Result */}
+                  {result.individual_results && result.individual_results.length > 0 && (
+                    <div className="p-6 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 rounded-xl backdrop-blur-lg">
+                      <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <Brain className="w-5 h-5 text-indigo-400" />
+                        Highest Confidence Model
+                      </h3>
+                      {(() => {
+                        const highestModel = getHighestConfidenceModel(result.individual_results);
+                        const prediction = highestModel.probability > 0.5 ? 'AI-generated' : 'Real';
+                        return (
+                          <p className="text-white text-base leading-relaxed">
+                            <span className="font-medium text-indigo-200">{highestModel.model}</span> says this image is{' '}
+                            <span className={`font-bold ${prediction === 'AI-generated' ? 'text-red-300' : 'text-green-300'}`}>
+                              {prediction}
+                            </span>{' '}
+                            with {(highestModel.probability * 100).toFixed(1)}% confidence
+                          </p>
+                        );
+                      })()}
+                    </div>
+                  )}
+
                   {/* Enhanced Main Result */}
                   <div className={`p-8 rounded-2xl bg-gradient-to-r ${getResultColor(result.result)} border backdrop-blur-lg`}>
                     <div className="flex items-center gap-4 mb-6">
