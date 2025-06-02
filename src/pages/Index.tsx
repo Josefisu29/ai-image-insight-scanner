@@ -248,22 +248,22 @@ const Index = () => {
   if (showSetup) {
     return (
       <div className={`min-h-screen bg-gradient-to-br ${currentTheme.colors.background} relative overflow-hidden`}>
-        <div className="container mx-auto px-4 py-8 relative z-10">
-          <div className="flex items-center justify-between mb-8 welcome-fade-in">
+        <div className="container-responsive section-spacing relative z-10">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 welcome-fade-in gap-4">
             <Button
               onClick={() => setShowSetup(false)}
-              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 ${currentTheme.colors.foreground} transition-all-smooth hover-scale`}
+              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 ${currentTheme.colors.foreground} transition-all-smooth hover-scale-sm order-2 sm:order-1`}
             >
               ← Back to App
             </Button>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 order-1 sm:order-2">
               <ThemeSwitcher />
               <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${
-                  backendStatus === 'connected' ? 'bg-green-400' : 
-                  backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400'
+                <div className={`w-3 h-3 rounded-full transition-all-smooth ${
+                  backendStatus === 'connected' ? 'bg-green-400 animate-pulse-glow' : 
+                  backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400 animate-pulse'
                 }`}></div>
-                <span className={`text-sm ${currentTheme.colors.foreground}`}>
+                <span className={`text-responsive-sm ${currentTheme.colors.foreground}`}>
                   Backend: {backendStatus === 'connected' ? 'Connected' : 
                            backendStatus === 'disconnected' ? 'Disconnected' : 'Checking...'}
                 </span>
@@ -280,36 +280,37 @@ const Index = () => {
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.colors.background} relative overflow-hidden`}>
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className={`absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r ${currentTheme.colors.primary} opacity-20 rounded-full blur-xl animate-pulse ${isLoaded ? 'welcome-scale-in animate-delay-300' : 'opacity-0'}`}></div>
-        <div className={`absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r ${currentTheme.colors.secondary} opacity-20 rounded-full blur-xl animate-pulse animation-delay-1000 ${isLoaded ? 'welcome-scale-in animate-delay-400' : 'opacity-0'}`}></div>
-        <div className={`absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r ${currentTheme.colors.accent} opacity-20 rounded-full blur-xl animate-pulse animation-delay-2000 ${isLoaded ? 'welcome-scale-in animate-delay-500' : 'opacity-0'}`}></div>
+      {/* Enhanced Animated background elements */}
+      <div className="absolute inset-0 opacity-20 overflow-hidden">
+        <div className={`absolute top-1/4 left-1/4 w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 bg-gradient-to-r ${currentTheme.colors.primary} opacity-30 rounded-full blur-xl animate-float ${isLoaded ? 'welcome-scale-in animate-delay-300' : 'opacity-0'}`}></div>
+        <div className={`absolute top-3/4 right-1/4 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-gradient-to-r ${currentTheme.colors.secondary} opacity-25 rounded-full blur-xl animate-float animation-delay-1000 ${isLoaded ? 'welcome-scale-in animate-delay-400' : 'opacity-0'}`}></div>
+        <div className={`absolute top-1/2 left-1/2 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-r ${currentTheme.colors.accent} opacity-35 rounded-full blur-xl animate-gentle-bounce animation-delay-2000 ${isLoaded ? 'welcome-scale-in animate-delay-500' : 'opacity-0'}`}></div>
+        <div className={`absolute top-10 right-10 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-r ${currentTheme.colors.primary} opacity-20 rounded-full blur-lg animate-float animate-delay-800 ${isLoaded ? 'welcome-elastic animate-delay-600' : 'opacity-0'}`}></div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Enhanced Header with Welcome Animation */}
-        <div className={`text-center mb-16 ${isLoaded ? 'welcome-fade-in' : 'opacity-0'}`}>
-          <div className={`flex items-center justify-center gap-3 mb-6 ${isLoaded ? 'welcome-bounce-in animate-delay-200' : 'opacity-0'}`}>
-            <div className={`p-3 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full transition-all-smooth hover-scale`}>
-              <Shield className="w-8 h-8 text-white" />
+      <div className="container-responsive section-spacing relative z-10">
+        {/* Enhanced Responsive Header with Welcome Animation */}
+        <div className={`text-center mb-8 sm:mb-12 lg:mb-16 ${isLoaded ? 'welcome-fade-in' : 'opacity-0'}`}>
+          <div className={`flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6 ${isLoaded ? 'welcome-bounce-in animate-delay-200' : 'opacity-0'}`}>
+            <div className={`p-2 sm:p-3 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full transition-all-smooth hover-scale animate-pulse-glow`}>
+              <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
-            <h1 className={`text-6xl font-bold bg-gradient-to-r ${currentTheme.colors.accent} bg-clip-text text-transparent`}>
+            <h1 className={`text-responsive-3xl font-bold bg-gradient-to-r ${currentTheme.colors.accent} bg-clip-text text-transparent gradient-text-animated text-center sm:text-left`}>
               AI Detector
             </h1>
-            <div className={`p-3 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full transition-all-smooth hover-scale`}>
-              <Sparkles className="w-8 h-8 text-white" />
+            <div className={`p-2 sm:p-3 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full transition-all-smooth hover-scale animate-pulse-glow`}>
+              <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
           </div>
           
-          {/* Backend Status Indicator */}
-          <div className={`flex items-center justify-center gap-4 mb-6 ${isLoaded ? 'welcome-slide-up animate-delay-300' : 'opacity-0'}`}>
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${currentTheme.colors.card} transition-all-smooth hover-scale`}>
-              <div className={`w-3 h-3 rounded-full animate-pulse ${
-                backendStatus === 'connected' ? 'bg-green-400' : 
-                backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400'
+          {/* Enhanced Responsive Backend Status Indicator */}
+          <div className={`flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6 ${isLoaded ? 'welcome-slide-up animate-delay-300' : 'opacity-0'}`}>
+            <div className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full ${currentTheme.colors.card} transition-all-smooth hover-scale-sm glass`}>
+              <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all-smooth ${
+                backendStatus === 'connected' ? 'bg-green-400 animate-pulse-glow' : 
+                backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400 animate-pulse'
               }`}></div>
-              <span className={`text-sm font-medium ${currentTheme.colors.foreground}`}>
+              <span className={`text-responsive-xs font-medium ${currentTheme.colors.foreground}`}>
                 Backend: {backendStatus === 'connected' ? 'Connected' : 
                          backendStatus === 'disconnected' ? 'Disconnected' : 'Checking...'}
               </span>
@@ -318,80 +319,80 @@ const Index = () => {
             <Button
               onClick={() => setShowSetup(true)}
               size="sm"
-              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 text-white transition-all-smooth hover-scale`}
+              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 text-white transition-all-smooth hover-scale-sm btn-responsive`}
             >
-              <Settings className="w-4 h-4 mr-2" />
-              Setup
+              <Settings className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="text-responsive-xs">Setup</span>
             </Button>
             {backendStatus === 'disconnected' && (
               <Button
                 onClick={checkBackendConnection}
                 size="sm"
-                className={`bg-gradient-to-r ${currentTheme.colors.secondary} hover:opacity-90 text-white transition-all-smooth hover-scale`}
+                className={`bg-gradient-to-r ${currentTheme.colors.secondary} hover:opacity-90 text-white transition-all-smooth hover-scale-sm btn-responsive`}
               >
-                Retry Connection
+                <span className="text-responsive-xs">Retry Connection</span>
               </Button>
             )}
           </div>
 
-          <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${currentTheme.colors.foreground} opacity-80 ${isLoaded ? 'welcome-slide-up animate-delay-400' : 'opacity-0'}`}>
+          <p className={`text-responsive-lg max-w-3xl mx-auto leading-relaxed ${currentTheme.colors.foreground} opacity-80 px-4 sm:px-0 ${isLoaded ? 'welcome-slide-up animate-delay-400' : 'opacity-0'}`}>
             Advanced multi-model detection system powered by cutting-edge AI to identify artificially generated images with unprecedented accuracy
           </p>
-          <div className={`flex items-center justify-center gap-6 mt-6 ${isLoaded ? 'welcome-scale-in animate-delay-500' : 'opacity-0'}`}>
-            <div className="flex items-center gap-2 text-green-400 transition-all-smooth hover-scale">
-              <Zap className="w-5 h-5" />
-              <span className="text-sm font-medium">Auto-Detection</span>
+          <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 ${isLoaded ? 'welcome-scale-in animate-delay-500' : 'opacity-0'}`}>
+            <div className="flex items-center gap-2 text-green-400 transition-all-smooth hover-scale-sm">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 animate-gentle-bounce" />
+              <span className="text-responsive-sm font-medium">Auto-Detection</span>
             </div>
-            <div className="flex items-center gap-2 text-blue-400 transition-all-smooth hover-scale">
-              <Brain className="w-5 h-5" />
-              <span className="text-sm font-medium">6 AI Models</span>
+            <div className="flex items-center gap-2 text-blue-400 transition-all-smooth hover-scale-sm">
+              <Brain className="w-4 h-4 sm:w-5 sm:h-5 animate-gentle-bounce animate-delay-200" />
+              <span className="text-responsive-sm font-medium">6 AI Models</span>
             </div>
-            <div className="flex items-center gap-2 text-purple-400 transition-all-smooth hover-scale">
-              <TrendingUp className="w-5 h-5" />
-              <span className="text-sm font-medium">Real-time Analysis</span>
+            <div className="flex items-center gap-2 text-purple-400 transition-all-smooth hover-scale-sm">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 animate-gentle-bounce animate-delay-400" />
+              <span className="text-responsive-sm font-medium">Real-time Analysis</span>
             </div>
           </div>
         </div>
 
-        <div className={`grid lg:grid-cols-2 gap-10 max-w-7xl mx-auto ${isLoaded ? 'welcome-slide-up animate-delay-700' : 'opacity-0'}`}>
-          {/* Enhanced Upload Section */}
-          <Card className={`${currentTheme.colors.card} shadow-2xl hover:shadow-3xl transition-all-smooth hover-lift`}>
-            <CardContent className="p-8">
-              <h2 className={`text-3xl font-semibold mb-8 flex items-center gap-3 ${currentTheme.colors.foreground}`}>
-                <Upload className="w-8 h-8 text-blue-400" />
+        <div className={`responsive-grid max-w-7xl mx-auto ${isLoaded ? 'welcome-slide-up animate-delay-700' : 'opacity-0'}`}>
+          {/* Enhanced Responsive Upload Section */}
+          <Card className={`${currentTheme.colors.card} card-responsive shadow-2xl hover:shadow-3xl transition-all-smooth hover-lift glass`}>
+            <CardContent className="padding-responsive-md">
+              <h2 className={`text-responsive-2xl font-semibold mb-6 sm:mb-8 flex items-center gap-2 sm:gap-3 ${currentTheme.colors.foreground}`}>
+                <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400 animate-gentle-bounce" />
                 Upload & Analyze
               </h2>
               
               <div
-                className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all-smooth hover-scale ${
+                className={`border-2 border-dashed rounded-xl sm:rounded-2xl p-8 sm:p-12 text-center transition-all-smooth hover-scale-sm ${
                   isDragOver
-                    ? `border-blue-400 bg-blue-400/20 scale-105`
-                    : `${currentTheme.colors.border} hover:border-white/40 hover:bg-white/5`
+                    ? `border-blue-400 bg-blue-400/20 scale-105 glass`
+                    : `${currentTheme.colors.border} hover:border-white/40 hover:bg-white/5 glass`
                 }`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
               >
                 {previewUrl ? (
-                  <div className="space-y-6 animate-scale-in">
+                  <div className="spacing-responsive-md animate-scale-in">
                     <div className="relative group">
                       <img
                         src={previewUrl}
                         alt="Preview"
-                        className="max-h-80 mx-auto rounded-xl shadow-2xl group-hover:shadow-3xl transition-all-smooth"
+                        className="max-h-60 sm:max-h-80 mx-auto rounded-lg sm:rounded-xl shadow-2xl group-hover:shadow-3xl transition-all-smooth hover-scale-sm"
                       />
                       {isDetecting && (
-                        <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
-                          <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 max-w-md">
+                        <div className="absolute inset-0 bg-black/50 rounded-lg sm:rounded-xl flex items-center justify-center p-4">
+                          <div className="glass-dark rounded-lg p-4 sm:p-6 max-w-sm sm:max-w-md">
                             <div className="flex items-center gap-3 text-white mb-4">
-                              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                              <span className="font-medium">Analyzing...</span>
+                              <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                              <span className="font-medium text-responsive-base">Analyzing...</span>
                             </div>
                             {uploadProgress > 0 && (
-                              <Progress value={uploadProgress} className="mb-4 h-2" />
+                              <Progress value={uploadProgress} className="mb-4 h-2 progress-glow" />
                             )}
                             {currentFunFact && (
-                              <div className="text-blue-200 text-sm leading-relaxed animate-fade-in">
+                              <div className="text-blue-200 text-responsive-sm leading-relaxed animate-fade-in">
                                 {currentFunFact}
                               </div>
                             )}
@@ -399,28 +400,28 @@ const Index = () => {
                         </div>
                       )}
                     </div>
-                    <p className="text-slate-300 font-medium text-lg">{selectedFile?.name}</p>
+                    <p className="text-slate-300 font-medium text-responsive-lg">{selectedFile?.name}</p>
                     {!isDetecting && (
                       <Button
                         onClick={() => detectImage()}
-                        className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 px-8 rounded-xl transition-all-smooth hover-scale"
+                        className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-xl transition-all-smooth hover-scale btn-responsive"
                       >
-                        <Brain className="w-5 h-5 mr-2" />
+                        <Brain className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                         Re-analyze Image
                       </Button>
                     )}
                   </div>
                 ) : (
-                  <div className="space-y-6 animate-fade-in">
+                  <div className="spacing-responsive-md animate-fade-in">
                     <div className="relative">
-                      <ImageIcon className="w-20 h-20 mx-auto text-slate-400 animate-pulse" />
-                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center animate-pulse">
-                        <Zap className="w-4 h-4 text-white" />
+                      <ImageIcon className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-slate-400 animate-pulse" />
+                      <div className="absolute -top-2 -right-2 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center animate-pulse-glow">
+                        <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                       </div>
                     </div>
                     <div>
-                      <p className="text-white text-2xl mb-3 font-semibold">Drop your image here</p>
-                      <p className="text-slate-400 text-lg">or click to browse • Auto-detection enabled</p>
+                      <p className="text-white text-responsive-xl mb-2 sm:mb-3 font-semibold">Drop your image here</p>
+                      <p className="text-slate-400 text-responsive-lg">or click to browse • Auto-detection enabled</p>
                     </div>
                   </div>
                 )}
@@ -435,28 +436,28 @@ const Index = () => {
             </CardContent>
           </Card>
 
-          {/* Enhanced Results Section */}
-          <Card className={`${currentTheme.colors.card} shadow-2xl hover:shadow-3xl transition-all-smooth hover-lift`}>
-            <CardContent className="p-8">
-              <h2 className={`text-3xl font-semibold mb-8 flex items-center gap-3 ${currentTheme.colors.foreground}`}>
-                <TrendingUp className="w-8 h-8 text-green-400" />
+          {/* Enhanced Responsive Results Section */}
+          <Card className={`${currentTheme.colors.card} card-responsive shadow-2xl hover:shadow-3xl transition-all-smooth hover-lift glass`}>
+            <CardContent className="padding-responsive-md">
+              <h2 className={`text-responsive-2xl font-semibold mb-6 sm:mb-8 flex items-center gap-2 sm:gap-3 ${currentTheme.colors.foreground}`}>
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-green-400 animate-gentle-bounce" />
                 Detection Results
               </h2>
 
               {result ? (
-                <div className="space-y-8 animate-fade-in">
+                <div className="spacing-responsive-lg animate-fade-in">
                   {/* Highest Confidence Model Result */}
                   {result.individual_results && result.individual_results.length > 0 && (
-                    <div className={`p-6 bg-gradient-to-r ${currentTheme.colors.gradientFrom} ${currentTheme.colors.gradientTo} ${currentTheme.colors.border} rounded-xl backdrop-blur-lg transition-all-smooth hover-scale`}>
-                      <h3 className={`text-lg font-semibold mb-3 flex items-center gap-2 ${currentTheme.colors.foreground}`}>
-                        <Brain className="w-5 h-5 text-indigo-400" />
+                    <div className={`padding-responsive-sm bg-gradient-to-r ${currentTheme.colors.gradientFrom} ${currentTheme.colors.gradientTo} ${currentTheme.colors.border} card-responsive glass transition-all-smooth hover-scale-sm`}>
+                      <h3 className={`text-responsive-lg font-semibold mb-3 flex items-center gap-2 ${currentTheme.colors.foreground}`}>
+                        <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />
                         Highest Confidence Model
                       </h3>
                       {(() => {
                         const highestModel = getHighestConfidenceModel(result.individual_results);
                         const prediction = highestModel.probability > 0.5 ? 'AI-generated' : 'Real';
                         return (
-                          <p className={`text-base leading-relaxed ${currentTheme.colors.foreground}`}>
+                          <p className={`text-responsive-base leading-relaxed ${currentTheme.colors.foreground}`}>
                             <span className="font-medium text-indigo-200">{highestModel.model}</span> says this image is{' '}
                             <span className={`font-bold ${prediction === 'AI-generated' ? 'text-red-300' : 'text-green-300'}`}>
                               {prediction}
@@ -468,52 +469,52 @@ const Index = () => {
                     </div>
                   )}
 
-                  {/* Enhanced Main Result */}
-                  <div className={`p-8 rounded-2xl bg-gradient-to-r ${getResultColor(result.result)} border backdrop-blur-lg transition-all-smooth hover-scale`}>
-                    <div className="flex items-center gap-4 mb-6">
+                  {/* Enhanced Responsive Main Result */}
+                  <div className={`padding-responsive-md card-responsive bg-gradient-to-r ${getResultColor(result.result)} border glass transition-all-smooth hover-scale-sm`}>
+                    <div className="flex flex-col sm:flex-row items-center gap-4 mb-4 sm:mb-6">
                       {getResultIcon(result.result)}
-                      <div>
-                        <span className="text-3xl font-bold text-white block">{result.result}</span>
-                        <span className="text-lg text-white/80">Detection Complete</span>
+                      <div className="text-center sm:text-left">
+                        <span className="text-responsive-2xl font-bold text-white block">{result.result}</span>
+                        <span className="text-responsive-lg text-white/80">Detection Complete</span>
                       </div>
                     </div>
-                    <div className="space-y-4">
-                      <div className="flex justify-between text-white items-center">
-                        <span className="text-lg font-medium">Confidence Level</span>
-                        <span className="text-2xl font-bold">{(result.confidence * 100).toFixed(1)}%</span>
+                    <div className="spacing-responsive-sm">
+                      <div className="flex flex-col sm:flex-row justify-between text-white items-center gap-2">
+                        <span className="text-responsive-lg font-medium">Confidence Level</span>
+                        <span className="text-responsive-2xl font-bold">{(result.confidence * 100).toFixed(1)}%</span>
                       </div>
                       <div className="relative">
-                        <Progress value={result.confidence * 100} className="h-4 bg-white/20" />
-                        <div className={`absolute inset-0 bg-gradient-to-r ${getResultGradient(result.result)} opacity-80 rounded-full transition-all-smooth`} 
+                        <Progress value={result.confidence * 100} className="h-3 sm:h-4 bg-white/20" />
+                        <div className={`absolute inset-0 bg-gradient-to-r ${getResultGradient(result.result)} opacity-80 rounded-full transition-all-smooth progress-glow`} 
                              style={{ width: `${result.confidence * 100}%` }}></div>
                       </div>
                     </div>
                   </div>
 
                   {/* Processing Time */}
-                  <div className="flex items-center gap-3 text-slate-300 bg-white/5 p-4 rounded-xl transition-all-smooth hover-scale">
-                    <Clock className="w-5 h-5 text-blue-400" />
-                    <span className="font-medium">Processed in {result.processing_time.toFixed(2)}s</span>
+                  <div className="flex items-center gap-3 text-slate-300 glass padding-responsive-sm card-responsive transition-all-smooth hover-scale-sm">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                    <span className="font-medium text-responsive-base">Processed in {result.processing_time.toFixed(2)}s</span>
                   </div>
 
-                  {/* Enhanced Model Breakdown */}
+                  {/* Enhanced Responsive Model Breakdown */}
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-                      <Brain className="w-6 h-6 text-purple-400" />
+                    <h3 className="text-responsive-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
+                      <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
                       AI Model Analysis
                     </h3>
-                    <div className="space-y-3">
+                    <div className="spacing-responsive-sm">
                       {result.individual_results.map((modelResult, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all-smooth border border-white/10 hover-scale">
+                        <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between padding-responsive-sm glass card-responsive hover:bg-white/10 transition-all-smooth border border-white/10 hover-scale-sm gap-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-                            <span className="text-slate-300 font-medium">{modelResult.model}</span>
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                            <span className="text-slate-300 font-medium text-responsive-base">{modelResult.model}</span>
                           </div>
                           <div className="flex items-center gap-3">
-                            <Badge variant="outline" className="text-xs bg-white/10 border-white/20">
+                            <Badge variant="outline" className="text-responsive-xs glass border-white/20">
                               Weight: {modelResult.weight}
                             </Badge>
-                            <span className="text-white font-bold text-lg">
+                            <span className="text-white font-bold text-responsive-lg">
                               {(modelResult.probability * 100).toFixed(1)}%
                             </span>
                           </div>
@@ -524,52 +525,52 @@ const Index = () => {
 
                   {/* Search Indication */}
                   {result.search_indication && (
-                    <div className="p-6 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl transition-all-smooth hover-scale">
+                    <div className="padding-responsive-sm bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 card-responsive glass transition-all-smooth hover-scale-sm">
                       <div className="flex items-center gap-3 mb-2">
-                        <AlertCircle className="w-5 h-5 text-yellow-400" />
-                        <span className="font-semibold text-yellow-200">Web Search Analysis</span>
+                        <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
+                        <span className="font-semibold text-yellow-200 text-responsive-base">Web Search Analysis</span>
                       </div>
-                      <p className="text-yellow-100">{result.search_indication}</p>
+                      <p className="text-yellow-100 text-responsive-base">{result.search_indication}</p>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="text-center py-16 animate-pulse">
-                  <Brain className="w-20 h-20 mx-auto text-slate-400 mb-6" />
-                  <p className={`text-xl ${currentTheme.colors.foreground} opacity-60`}>Upload an image to see detection results</p>
-                  <p className={`mt-2 ${currentTheme.colors.foreground} opacity-40`}>Automatic analysis will begin immediately</p>
+                <div className="text-center section-spacing-sm animate-pulse">
+                  <Brain className="w-16 h-16 sm:w-20 sm:h-20 mx-auto text-slate-400 mb-4 sm:mb-6 animate-gentle-bounce" />
+                  <p className={`text-responsive-xl ${currentTheme.colors.foreground} opacity-60`}>Upload an image to see detection results</p>
+                  <p className={`mt-2 text-responsive-base ${currentTheme.colors.foreground} opacity-40`}>Automatic analysis will begin immediately</p>
                 </div>
               )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Enhanced Info Section */}
-        <div className={`mt-16 ${isLoaded ? 'welcome-slide-up animate-delay-700' : 'opacity-0'}`}>
-          <Card className={`${currentTheme.colors.card} max-w-6xl mx-auto shadow-2xl transition-all-smooth hover-lift`}>
-            <CardContent className="p-10">
-              <h3 className={`text-3xl font-semibold mb-8 text-center ${currentTheme.colors.foreground}`}>How Our AI Detection Works</h3>
-              <div className={`grid md:grid-cols-3 gap-8 ${currentTheme.colors.foreground} opacity-80`}>
+        {/* Enhanced Responsive Info Section */}
+        <div className={`section-spacing ${isLoaded ? 'welcome-slide-up animate-delay-700' : 'opacity-0'}`}>
+          <Card className={`${currentTheme.colors.card} max-w-6xl mx-auto card-responsive shadow-2xl transition-all-smooth hover-lift glass`}>
+            <CardContent className="padding-responsive-lg">
+              <h3 className={`text-responsive-2xl font-semibold mb-6 sm:mb-8 text-center ${currentTheme.colors.foreground}`}>How Our AI Detection Works</h3>
+              <div className={`responsive-grid-3 ${currentTheme.colors.foreground} opacity-80`}>
                 <div className="text-center group hover-scale transition-all-smooth">
-                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg transition-all-smooth`}>
-                    <Upload className="w-12 h-12 text-white" />
+                  <div className={`p-3 sm:p-4 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 group-hover:shadow-lg transition-all-smooth animate-pulse-glow`}>
+                    <Upload className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                   </div>
-                  <h4 className={`font-semibold mb-3 text-xl ${currentTheme.colors.foreground}`}>Instant Upload</h4>
-                  <p className="text-base leading-relaxed">Drag & drop any image for immediate automatic analysis with real-time progress tracking</p>
+                  <h4 className={`font-semibold mb-2 sm:mb-3 text-responsive-xl ${currentTheme.colors.foreground}`}>Instant Upload</h4>
+                  <p className="text-responsive-base leading-relaxed">Drag & drop any image for immediate automatic analysis with real-time progress tracking</p>
                 </div>
                 <div className="text-center group hover-scale transition-all-smooth">
-                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg transition-all-smooth`}>
-                    <Brain className="w-12 h-12 text-white" />
+                  <div className={`p-3 sm:p-4 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 group-hover:shadow-lg transition-all-smooth animate-pulse-glow animate-delay-300`}>
+                    <Brain className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                   </div>
-                  <h4 className={`font-semibold mb-3 text-xl ${currentTheme.colors.foreground}`}>Multi-Model AI</h4>
-                  <p className="text-base leading-relaxed">6 specialized AI models analyze your image simultaneously for maximum accuracy</p>
+                  <h4 className={`font-semibold mb-2 sm:mb-3 text-responsive-xl ${currentTheme.colors.foreground}`}>Multi-Model AI</h4>
+                  <p className="text-responsive-base leading-relaxed">6 specialized AI models analyze your image simultaneously for maximum accuracy</p>
                 </div>
                 <div className="text-center group hover-scale transition-all-smooth">
-                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.success} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg transition-all-smooth`}>
-                    <TrendingUp className="w-12 h-12 text-white" />
+                  <div className={`p-3 sm:p-4 bg-gradient-to-r ${currentTheme.colors.success} rounded-full w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 group-hover:shadow-lg transition-all-smooth animate-pulse-glow animate-delay-600`}>
+                    <TrendingUp className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                   </div>
-                  <h4 className={`font-semibold mb-3 text-xl ${currentTheme.colors.foreground}`}>Detailed Results</h4>
-                  <p className="text-base leading-relaxed">Get comprehensive analysis with confidence scores and model-by-model breakdown</p>
+                  <h4 className={`font-semibold mb-2 sm:mb-3 text-responsive-xl ${currentTheme.colors.foreground}`}>Detailed Results</h4>
+                  <p className="text-responsive-base leading-relaxed">Get comprehensive analysis with confidence scores and model-by-model breakdown</p>
                 </div>
               </div>
             </CardContent>
