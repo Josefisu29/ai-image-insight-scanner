@@ -48,6 +48,15 @@ const Index = () => {
   const [backendStatus, setBackendStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
   const [showSetup, setShowSetup] = useState(false);
   const [currentFunFact, setCurrentFunFact] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Welcome animation on load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Check backend connectivity on component mount
   useEffect(() => {
@@ -240,10 +249,10 @@ const Index = () => {
     return (
       <div className={`min-h-screen bg-gradient-to-br ${currentTheme.colors.background} relative overflow-hidden`}>
         <div className="container mx-auto px-4 py-8 relative z-10">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 welcome-fade-in">
             <Button
               onClick={() => setShowSetup(false)}
-              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 ${currentTheme.colors.foreground}`}
+              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 ${currentTheme.colors.foreground} transition-all-smooth hover-scale`}
             >
               ← Back to App
             </Button>
@@ -261,7 +270,9 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <BackendSetup />
+          <div className="welcome-slide-up animate-delay-200">
+            <BackendSetup />
+          </div>
         </div>
       </div>
     );
@@ -271,29 +282,29 @@ const Index = () => {
     <div className={`min-h-screen bg-gradient-to-br ${currentTheme.colors.background} relative overflow-hidden`}>
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-30">
-        <div className={`absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r ${currentTheme.colors.primary} opacity-20 rounded-full blur-xl animate-pulse`}></div>
-        <div className={`absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r ${currentTheme.colors.secondary} opacity-20 rounded-full blur-xl animate-pulse animation-delay-1000`}></div>
-        <div className={`absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r ${currentTheme.colors.accent} opacity-20 rounded-full blur-xl animate-pulse animation-delay-2000`}></div>
+        <div className={`absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r ${currentTheme.colors.primary} opacity-20 rounded-full blur-xl animate-pulse ${isLoaded ? 'welcome-scale-in animate-delay-300' : 'opacity-0'}`}></div>
+        <div className={`absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r ${currentTheme.colors.secondary} opacity-20 rounded-full blur-xl animate-pulse animation-delay-1000 ${isLoaded ? 'welcome-scale-in animate-delay-400' : 'opacity-0'}`}></div>
+        <div className={`absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r ${currentTheme.colors.accent} opacity-20 rounded-full blur-xl animate-pulse animation-delay-2000 ${isLoaded ? 'welcome-scale-in animate-delay-500' : 'opacity-0'}`}></div>
       </div>
 
       <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Enhanced Header with Backend Status */}
-        <div className="text-center mb-16 animate-fade-in">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className={`p-3 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full`}>
+        {/* Enhanced Header with Welcome Animation */}
+        <div className={`text-center mb-16 ${isLoaded ? 'welcome-fade-in' : 'opacity-0'}`}>
+          <div className={`flex items-center justify-center gap-3 mb-6 ${isLoaded ? 'welcome-bounce-in animate-delay-200' : 'opacity-0'}`}>
+            <div className={`p-3 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full transition-all-smooth hover-scale`}>
               <Shield className="w-8 h-8 text-white" />
             </div>
             <h1 className={`text-6xl font-bold bg-gradient-to-r ${currentTheme.colors.accent} bg-clip-text text-transparent`}>
               AI Detector
             </h1>
-            <div className={`p-3 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full`}>
+            <div className={`p-3 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full transition-all-smooth hover-scale`}>
               <Sparkles className="w-8 h-8 text-white" />
             </div>
           </div>
           
           {/* Backend Status Indicator */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${currentTheme.colors.card}`}>
+          <div className={`flex items-center justify-center gap-4 mb-6 ${isLoaded ? 'welcome-slide-up animate-delay-300' : 'opacity-0'}`}>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${currentTheme.colors.card} transition-all-smooth hover-scale`}>
               <div className={`w-3 h-3 rounded-full animate-pulse ${
                 backendStatus === 'connected' ? 'bg-green-400' : 
                 backendStatus === 'disconnected' ? 'bg-red-400' : 'bg-yellow-400'
@@ -307,7 +318,7 @@ const Index = () => {
             <Button
               onClick={() => setShowSetup(true)}
               size="sm"
-              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 text-white`}
+              className={`bg-gradient-to-r ${currentTheme.colors.primary} hover:opacity-90 text-white transition-all-smooth hover-scale`}
             >
               <Settings className="w-4 h-4 mr-2" />
               Setup
@@ -316,35 +327,35 @@ const Index = () => {
               <Button
                 onClick={checkBackendConnection}
                 size="sm"
-                className={`bg-gradient-to-r ${currentTheme.colors.secondary} hover:opacity-90 text-white`}
+                className={`bg-gradient-to-r ${currentTheme.colors.secondary} hover:opacity-90 text-white transition-all-smooth hover-scale`}
               >
                 Retry Connection
               </Button>
             )}
           </div>
 
-          <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${currentTheme.colors.foreground} opacity-80`}>
+          <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${currentTheme.colors.foreground} opacity-80 ${isLoaded ? 'welcome-slide-up animate-delay-400' : 'opacity-0'}`}>
             Advanced multi-model detection system powered by cutting-edge AI to identify artificially generated images with unprecedented accuracy
           </p>
-          <div className="flex items-center justify-center gap-6 mt-6">
-            <div className="flex items-center gap-2 text-green-400">
+          <div className={`flex items-center justify-center gap-6 mt-6 ${isLoaded ? 'welcome-scale-in animate-delay-500' : 'opacity-0'}`}>
+            <div className="flex items-center gap-2 text-green-400 transition-all-smooth hover-scale">
               <Zap className="w-5 h-5" />
               <span className="text-sm font-medium">Auto-Detection</span>
             </div>
-            <div className="flex items-center gap-2 text-blue-400">
+            <div className="flex items-center gap-2 text-blue-400 transition-all-smooth hover-scale">
               <Brain className="w-5 h-5" />
               <span className="text-sm font-medium">6 AI Models</span>
             </div>
-            <div className="flex items-center gap-2 text-purple-400">
+            <div className="flex items-center gap-2 text-purple-400 transition-all-smooth hover-scale">
               <TrendingUp className="w-5 h-5" />
               <span className="text-sm font-medium">Real-time Analysis</span>
             </div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
+        <div className={`grid lg:grid-cols-2 gap-10 max-w-7xl mx-auto ${isLoaded ? 'welcome-slide-up animate-delay-700' : 'opacity-0'}`}>
           {/* Enhanced Upload Section */}
-          <Card className={`${currentTheme.colors.card} shadow-2xl hover:shadow-3xl transition-all duration-500`}>
+          <Card className={`${currentTheme.colors.card} shadow-2xl hover:shadow-3xl transition-all-smooth hover-lift`}>
             <CardContent className="p-8">
               <h2 className={`text-3xl font-semibold mb-8 flex items-center gap-3 ${currentTheme.colors.foreground}`}>
                 <Upload className="w-8 h-8 text-blue-400" />
@@ -352,7 +363,7 @@ const Index = () => {
               </h2>
               
               <div
-                className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-500 transform hover:scale-[1.02] ${
+                className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all-smooth hover-scale ${
                   isDragOver
                     ? `border-blue-400 bg-blue-400/20 scale-105`
                     : `${currentTheme.colors.border} hover:border-white/40 hover:bg-white/5`
@@ -367,7 +378,7 @@ const Index = () => {
                       <img
                         src={previewUrl}
                         alt="Preview"
-                        className="max-h-80 mx-auto rounded-xl shadow-2xl group-hover:shadow-3xl transition-all duration-300"
+                        className="max-h-80 mx-auto rounded-xl shadow-2xl group-hover:shadow-3xl transition-all-smooth"
                       />
                       {isDetecting && (
                         <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
@@ -392,7 +403,7 @@ const Index = () => {
                     {!isDetecting && (
                       <Button
                         onClick={() => detectImage()}
-                        className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105"
+                        className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 px-8 rounded-xl transition-all-smooth hover-scale"
                       >
                         <Brain className="w-5 h-5 mr-2" />
                         Re-analyze Image
@@ -403,7 +414,7 @@ const Index = () => {
                   <div className="space-y-6 animate-fade-in">
                     <div className="relative">
                       <ImageIcon className="w-20 h-20 mx-auto text-slate-400 animate-pulse" />
-                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center animate-pulse">
                         <Zap className="w-4 h-4 text-white" />
                       </div>
                     </div>
@@ -425,7 +436,7 @@ const Index = () => {
           </Card>
 
           {/* Enhanced Results Section */}
-          <Card className={`${currentTheme.colors.card} shadow-2xl hover:shadow-3xl transition-all duration-500`}>
+          <Card className={`${currentTheme.colors.card} shadow-2xl hover:shadow-3xl transition-all-smooth hover-lift`}>
             <CardContent className="p-8">
               <h2 className={`text-3xl font-semibold mb-8 flex items-center gap-3 ${currentTheme.colors.foreground}`}>
                 <TrendingUp className="w-8 h-8 text-green-400" />
@@ -436,7 +447,7 @@ const Index = () => {
                 <div className="space-y-8 animate-fade-in">
                   {/* Highest Confidence Model Result */}
                   {result.individual_results && result.individual_results.length > 0 && (
-                    <div className={`p-6 bg-gradient-to-r ${currentTheme.colors.gradientFrom} ${currentTheme.colors.gradientTo} ${currentTheme.colors.border} rounded-xl backdrop-blur-lg`}>
+                    <div className={`p-6 bg-gradient-to-r ${currentTheme.colors.gradientFrom} ${currentTheme.colors.gradientTo} ${currentTheme.colors.border} rounded-xl backdrop-blur-lg transition-all-smooth hover-scale`}>
                       <h3 className={`text-lg font-semibold mb-3 flex items-center gap-2 ${currentTheme.colors.foreground}`}>
                         <Brain className="w-5 h-5 text-indigo-400" />
                         Highest Confidence Model
@@ -458,7 +469,7 @@ const Index = () => {
                   )}
 
                   {/* Enhanced Main Result */}
-                  <div className={`p-8 rounded-2xl bg-gradient-to-r ${getResultColor(result.result)} border backdrop-blur-lg`}>
+                  <div className={`p-8 rounded-2xl bg-gradient-to-r ${getResultColor(result.result)} border backdrop-blur-lg transition-all-smooth hover-scale`}>
                     <div className="flex items-center gap-4 mb-6">
                       {getResultIcon(result.result)}
                       <div>
@@ -473,14 +484,14 @@ const Index = () => {
                       </div>
                       <div className="relative">
                         <Progress value={result.confidence * 100} className="h-4 bg-white/20" />
-                        <div className={`absolute inset-0 bg-gradient-to-r ${getResultGradient(result.result)} opacity-80 rounded-full`} 
+                        <div className={`absolute inset-0 bg-gradient-to-r ${getResultGradient(result.result)} opacity-80 rounded-full transition-all-smooth`} 
                              style={{ width: `${result.confidence * 100}%` }}></div>
                       </div>
                     </div>
                   </div>
 
                   {/* Processing Time */}
-                  <div className="flex items-center gap-3 text-slate-300 bg-white/5 p-4 rounded-xl">
+                  <div className="flex items-center gap-3 text-slate-300 bg-white/5 p-4 rounded-xl transition-all-smooth hover-scale">
                     <Clock className="w-5 h-5 text-blue-400" />
                     <span className="font-medium">Processed in {result.processing_time.toFixed(2)}s</span>
                   </div>
@@ -493,7 +504,7 @@ const Index = () => {
                     </h3>
                     <div className="space-y-3">
                       {result.individual_results.map((modelResult, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300 border border-white/10">
+                        <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all-smooth border border-white/10 hover-scale">
                           <div className="flex items-center gap-3">
                             <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
                             <span className="text-slate-300 font-medium">{modelResult.model}</span>
@@ -513,7 +524,7 @@ const Index = () => {
 
                   {/* Search Indication */}
                   {result.search_indication && (
-                    <div className="p-6 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl">
+                    <div className="p-6 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-xl transition-all-smooth hover-scale">
                       <div className="flex items-center gap-3 mb-2">
                         <AlertCircle className="w-5 h-5 text-yellow-400" />
                         <span className="font-semibold text-yellow-200">Web Search Analysis</span>
@@ -534,27 +545,27 @@ const Index = () => {
         </div>
 
         {/* Enhanced Info Section */}
-        <div className="mt-16">
-          <Card className={`${currentTheme.colors.card} max-w-6xl mx-auto shadow-2xl`}>
+        <div className={`mt-16 ${isLoaded ? 'welcome-slide-up animate-delay-700' : 'opacity-0'}`}>
+          <Card className={`${currentTheme.colors.card} max-w-6xl mx-auto shadow-2xl transition-all-smooth hover-lift`}>
             <CardContent className="p-10">
               <h3 className={`text-3xl font-semibold mb-8 text-center ${currentTheme.colors.foreground}`}>How Our AI Detection Works</h3>
               <div className={`grid md:grid-cols-3 gap-8 ${currentTheme.colors.foreground} opacity-80`}>
-                <div className="text-center group hover:scale-105 transition-all duration-300">
-                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg`}>
+                <div className="text-center group hover-scale transition-all-smooth">
+                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.primary} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg transition-all-smooth`}>
                     <Upload className="w-12 h-12 text-white" />
                   </div>
                   <h4 className={`font-semibold mb-3 text-xl ${currentTheme.colors.foreground}`}>Instant Upload</h4>
                   <p className="text-base leading-relaxed">Drag & drop any image for immediate automatic analysis with real-time progress tracking</p>
                 </div>
-                <div className="text-center group hover:scale-105 transition-all duration-300">
-                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg`}>
+                <div className="text-center group hover-scale transition-all-smooth">
+                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.secondary} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg transition-all-smooth`}>
                     <Brain className="w-12 h-12 text-white" />
                   </div>
                   <h4 className={`font-semibold mb-3 text-xl ${currentTheme.colors.foreground}`}>Multi-Model AI</h4>
                   <p className="text-base leading-relaxed">6 specialized AI models analyze your image simultaneously for maximum accuracy</p>
                 </div>
-                <div className="text-center group hover:scale-105 transition-all duration-300">
-                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.success} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg`}>
+                <div className="text-center group hover-scale transition-all-smooth">
+                  <div className={`p-4 bg-gradient-to-r ${currentTheme.colors.success} rounded-full w-20 h-20 mx-auto mb-4 group-hover:shadow-lg transition-all-smooth`}>
                     <TrendingUp className="w-12 h-12 text-white" />
                   </div>
                   <h4 className={`font-semibold mb-3 text-xl ${currentTheme.colors.foreground}`}>Detailed Results</h4>
