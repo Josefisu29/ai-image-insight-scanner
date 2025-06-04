@@ -1,0 +1,16 @@
+---
+services:
+  - type: web
+    name: ai-detector-backend
+    env: python
+    region: oregon           # or your preferred region
+    plan: free               # or “starter,” “standard,” etc.
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: HUGGINGFACE_API_TOKEN
+        value: "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"
+      - key: IMGBB_API_KEYS
+        value: "FbV8wZA0jkwWH1h7ZCz_bR0ULRx-m8vqhlNLO0rPs-k,skLVcAegrf6TZzWFra-OjCwrtSu3PlhfHHpOAPGeaJE,RLUg1t-RDnG4-f4jW-l_Kn4j7vvwfWFa6Zqy4QyMd9E"
+      - key: SERPAPI_KEYS
+        value: "7eef3245c3e696b1d1202409aac509b219110253"
